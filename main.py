@@ -32,10 +32,11 @@ def model_prediction(reqBody: ImageRequestBody):
     imgArr = np.frombuffer(imBytes, dtype=np.uint8)
     realImage = cv2.imdecode(imgArr, flags=cv2.IMREAD_COLOR)
     # cv2.imwrite("./test.png", img)
-    # Is optional but i recommend (float convertion and convert img to tensor image)
+
     rgbTensor = tf.convert_to_tensor(realImage, dtype=tf.float32)
-    # Add dims to rgb_tensor
+    # !!! expand_dims
     rgbTensor = tf.expand_dims(rgbTensor, 0)
+    # resize
     rgbTensor = tf.image.resize(rgbTensor, (200, 200))
 
     probabilityModel = tf.keras.Sequential([model,
